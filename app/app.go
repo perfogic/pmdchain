@@ -96,14 +96,15 @@ import (
 	ibcporttypes "github.com/cosmos/ibc-go/v6/modules/core/05-port/types"
 	ibchost "github.com/cosmos/ibc-go/v6/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/v6/modules/core/keeper"
-	anteEthermint "github.com/evmos/ethermint/app/ante"
+	"github.com/evmos/ethermint/app/ante"
 	"github.com/evmos/ethermint/ethereum/eip712"
 	srvflags "github.com/evmos/ethermint/server/flags"
 	"github.com/evmos/ethermint/x/evm"
 	evmtypes "github.com/evmos/ethermint/x/evm/types"
 	"github.com/evmos/ethermint/x/evm/vm/geth"
 	feemarkettypes "github.com/evmos/ethermint/x/feemarket/types"
-	ante "github.com/evmos/evmos/v11/app/ante"
+
+	// ante "github.com/evmos/evmos/v11/app/ante"
 
 	"github.com/evmos/ethermint/x/feemarket"
 	"github.com/spf13/cast"
@@ -750,23 +751,24 @@ func New(
 	app.SetBeginBlocker(app.BeginBlocker)
 
 	maxGasWanted := cast.ToUint64(appOpts.Get(srvflags.EVMMaxTxGasWanted))
-	options := ante.HandlerOptions{
-		AccountKeeper:   app.AccountKeeper,
-		BankKeeper:      app.BankKeeper,
-		EvmKeeper:       app.EvmKeeper,
-		StakingKeeper:   app.StakingKeeper,
-		FeegrantKeeper:  app.FeeGrantKeeper,
-		IBCKeeper:       app.IBCKeeper,
-		FeeMarketKeeper: app.FeeMarketKeeper,
-		SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
-		//SigGasConsumer:  cosmosante.DefaultSigVerificationGasConsumer,
-		SigGasConsumer: anteEthermint.DefaultSigVerificationGasConsumer,
-		Cdc:            appCodec,
-		MaxTxGasWanted: maxGasWanted,
+	anteHandler, err := ante.NewAnteHandler(ante.HandlerOptions{
+		AccountKeeper:          app.AccountKeeper,
+		BankKeeper:             app.BankKeeper,
+		SignModeHandler:        encodingConfig.TxConfig.SignModeHandler(),
+		FeegrantKeeper:         app.FeeGrantKeeper,
+		SigGasConsumer:         ante.DefaultSigVerificationGasConsumer,
+		IBCKeeper:              app.IBCKeeper,
+		EvmKeeper:              app.EvmKeeper,
+		FeeMarketKeeper:        app.FeeMarketKeeper,
+		MaxTxGasWanted:         maxGasWanted,
+		ExtensionOptionChecker: ethermint.HasDynamicFeeExtensionOption,
+		TxFeeChecker:           ante.NewDynamicFeeChecker(app.EvmKeeper),
+	})
+	if err != nil {
+		panic(err)
 	}
 
-	app.SetAnteHandler(ante.NewAnteHandler(options))
-	app.SetInitChainer(app.InitChainer)
+	app.SetAnteHandler(anteHandler)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
 

@@ -6,7 +6,6 @@ require (
 	github.com/cosmos/cosmos-sdk v0.46.8
 	github.com/cosmos/ibc-go/v6 v6.1.0
 	github.com/evmos/ethermint v0.21.0
-	github.com/evmos/evmos/v11 v11.0.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.3
 	github.com/gorilla/mux v1.8.0
@@ -15,7 +14,6 @@ require (
 	github.com/regen-network/cosmos-proto v0.3.1
 	github.com/spf13/cast v1.5.0
 	github.com/spf13/cobra v1.6.1
-	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.1
 	github.com/tendermint/tendermint v0.34.24
 	github.com/tendermint/tm-db v0.6.7
@@ -39,6 +37,7 @@ require (
 	github.com/StackExchange/wmi v1.2.1 // indirect
 	github.com/VictoriaMetrics/fastcache v1.6.0 // indirect
 	github.com/Workiva/go-datastructures v1.0.53 // indirect
+	github.com/allegro/bigcache v1.2.1 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/aws/aws-sdk-go v1.40.45 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -71,6 +70,8 @@ require (
 	github.com/dgraph-io/badger/v2 v2.2007.4 // indirect
 	github.com/dgraph-io/ristretto v0.1.0 // indirect
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
+	github.com/dlclark/regexp2 v1.4.1-0.20201116162257-a2a8dda75c91 // indirect
+	github.com/dop251/goja v0.0.0-20220405120441-9037c2b61cbf // indirect
 	github.com/dustin/go-humanize v1.0.1-0.20200219035652-afde56e7acac // indirect
 	github.com/dvsekhvalnov/jose2go v1.5.0 // indirect
 	github.com/edsrzf/mmap-go v1.0.0 // indirect
@@ -83,6 +84,7 @@ require (
 	github.com/go-kit/log v0.2.1 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/gogo/gateway v1.1.0 // indirect
@@ -134,6 +136,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/opencontainers/runc v1.1.4 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
@@ -154,6 +157,7 @@ require (
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect
 	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.14.0 // indirect
 	github.com/status-im/keycard-go v0.0.0-20200402102358-957c09536969 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
