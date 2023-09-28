@@ -8,6 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	simulationtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
+	ethermintEncoding "github.com/evmos/ethermint/encoding"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
@@ -55,7 +56,7 @@ func BenchmarkSimulation(b *testing.B) {
 		require.NoError(b, err)
 	})
 
-	encoding := app.MakeEncodingConfig()
+	encoding := ethermintEncoding.MakeConfig(app.ModuleBasics)
 
 	app := app.New(
 		logger,
