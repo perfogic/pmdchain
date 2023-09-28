@@ -1,0 +1,12 @@
+syntax = "proto3";
+package perfogic.pmdchain.pmdchain;
+
+import "gogoproto/gogo.proto";
+import "pmdchain/pmdchain/params.proto";
+
+option go_package = "github.com/perfogic/pmdchain/x/pmdchain/types";
+
+// GenesisState defines the pmdchain module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}

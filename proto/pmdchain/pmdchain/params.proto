@@ -1,0 +1,12 @@
+syntax = "proto3";
+package perfogic.pmdchain.pmdchain;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/perfogic/pmdchain/x/pmdchain/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}
