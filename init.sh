@@ -20,7 +20,7 @@ pmdchaind config keyring-backend $KEYRING
 pmdchaind config chain-id $CHAINID
 
 # if $KEY exists it should be deleted
-pmdchaind keys add $KEY --keyring-backend $KEYRING
+pmdchaind keys add $KEY --keyring-backend $KEYRING --algo $KEYALGO
 
 # Set moniker and chain-id for pmdchain (Moniker can be anything, chain-id must be an integer)
 pmdchaind init $MONIKER --chain-id $CHAINID
