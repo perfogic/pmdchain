@@ -7,8 +7,8 @@ import (
 
 const (
 	// DisplayDenom defines the denomination displayed to users in client applications.
-	DisplayDenom = "Sun"
-	AttoDenom    = "aSun"
+	DisplayDenom = "pmd"
+	AttoDenom    = "aPmd"
 )
 
 // RegisterDenoms registers the base and display denominations to the SDK.
