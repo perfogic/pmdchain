@@ -96,7 +96,7 @@ import (
 	ibcporttypes "github.com/cosmos/ibc-go/v6/modules/core/05-port/types"
 	ibchost "github.com/cosmos/ibc-go/v6/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/v6/modules/core/keeper"
-	"github.com/evmos/ethermint/app/ante"
+
 	"github.com/evmos/ethermint/ethereum/eip712"
 	srvflags "github.com/evmos/ethermint/server/flags"
 	"github.com/evmos/ethermint/x/evm"
@@ -104,7 +104,8 @@ import (
 	"github.com/evmos/ethermint/x/evm/vm/geth"
 	feemarkettypes "github.com/evmos/ethermint/x/feemarket/types"
 
-	// ante "github.com/evmos/evmos/v11/app/ante"
+	anteEthermint "github.com/evmos/ethermint/app/ante"
+	"github.com/evmos/evmos/v11/app/ante"
 
 	"github.com/evmos/ethermint/x/feemarket"
 	"github.com/spf13/cast"
@@ -606,12 +607,12 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		icaModule,
-		pmdchainModule,
-		// this line is used by starport scaffolding # stargate/app/appModule
-
 		// Ethermint app modules
 		feemarket.NewAppModule(app.FeeMarketKeeper, feeMarketSs),
 		evm.NewAppModule(app.EvmKeeper, app.AccountKeeper, evmSs),
+		pmdchainModule,
+		// this line is used by starport scaffolding # stargate/app/appModule
+
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -687,9 +688,7 @@ func New(
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
-		crisistypes.ModuleName,
 		genutiltypes.ModuleName,
-		ibctransfertypes.ModuleName,
 		ibchost.ModuleName,
 		// evm module denomination is used by the feemarket module, in AnteHandle
 		evmtypes.ModuleName,
@@ -698,6 +697,7 @@ func New(
 		feemarkettypes.ModuleName,
 		icatypes.ModuleName,
 		evidencetypes.ModuleName,
+		ibctransfertypes.ModuleName,
 		authz.ModuleName,
 		feegrant.ModuleName,
 		group.ModuleName,
@@ -705,6 +705,7 @@ func New(
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
 		pmdchainmoduletypes.ModuleName,
+		crisistypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
@@ -751,24 +752,26 @@ func New(
 	app.SetBeginBlocker(app.BeginBlocker)
 
 	maxGasWanted := cast.ToUint64(appOpts.Get(srvflags.EVMMaxTxGasWanted))
-	anteHandler, err := ante.NewAnteHandler(ante.HandlerOptions{
+	options := ante.HandlerOptions{
 		AccountKeeper:          app.AccountKeeper,
 		BankKeeper:             app.BankKeeper,
-		SignModeHandler:        encodingConfig.TxConfig.SignModeHandler(),
-		FeegrantKeeper:         app.FeeGrantKeeper,
-		SigGasConsumer:         ante.DefaultSigVerificationGasConsumer,
-		IBCKeeper:              app.IBCKeeper,
+		ExtensionOptionChecker: nil,
 		EvmKeeper:              app.EvmKeeper,
+		StakingKeeper:          app.StakingKeeper,
+		FeegrantKeeper:         app.FeeGrantKeeper,
+		IBCKeeper:              app.IBCKeeper,
 		FeeMarketKeeper:        app.FeeMarketKeeper,
+		SignModeHandler:        encodingConfig.TxConfig.SignModeHandler(),
+		SigGasConsumer:         anteEthermint.DefaultSigVerificationGasConsumer,
+		Cdc:                    appCodec,
 		MaxTxGasWanted:         maxGasWanted,
-		ExtensionOptionChecker: ethermint.HasDynamicFeeExtensionOption,
-		TxFeeChecker:           ante.NewDynamicFeeChecker(app.EvmKeeper),
-	})
-	if err != nil {
+	}
+
+	if err := options.Validate(); err != nil {
 		panic(err)
 	}
 
-	app.SetAnteHandler(anteHandler)
+	app.SetAnteHandler(ante.NewAnteHandler(options))
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
 

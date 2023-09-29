@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	cmd.InitSDKConfig()
 	cmdconfig.RegisterDenoms()
 	rootCmd, _ := cmd.NewRootCmd()
 	if err := svrcmd.Execute(rootCmd, "", app.DefaultNodeHome); err != nil {
