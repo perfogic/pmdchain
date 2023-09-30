@@ -2,7 +2,7 @@
 
 KEY="mykey"
 KEY_FAUCET="faucet"
-CHAINID="pmdchain_7100-1"
+CHAINID="pmdchain_9000-1"
 MONIKER="localtestnet"
 KEYRING="test"
 KEYALGO="eth_secp256k1"
