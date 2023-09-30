@@ -129,8 +129,7 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "pmd"
-	Name                 = "pmdchain"
+	Name = "pmdchain"
 )
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
