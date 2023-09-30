@@ -2,22 +2,13 @@ package cmd
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/perfogic/pmdchain/app"
+	cmdcfg "github.com/perfogic/pmdchain/cmd/config"
 )
 
 func InitSDKConfig() {
-	// Set prefixes
-	accountPubKeyPrefix := app.AccountAddressPrefix + "pub"
-	validatorAddressPrefix := app.AccountAddressPrefix + "valoper"
-	validatorPubKeyPrefix := app.AccountAddressPrefix + "valoperpub"
-	consNodeAddressPrefix := app.AccountAddressPrefix + "valcons"
-	consNodePubKeyPrefix := app.AccountAddressPrefix + "valconspub"
-
-	// Set and seal config
+	// set the address prefixes
 	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(app.AccountAddressPrefix, accountPubKeyPrefix)
-	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
-	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
+	cmdcfg.SetBech32Prefixes(config)
+	cmdcfg.SetBip44CoinType(config)
 	config.Seal()
 }

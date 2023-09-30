@@ -6,7 +6,7 @@ CHAINID="pmdchain_9000-1"
 MONIKER="localtestnet"
 KEYRING="test"
 KEYALGO="eth_secp256k1"
-LOGLEVEL="debug"
+LOGLEVEL="info"
 # trace evm
 TRACE="--trace"
 # TRACE=""
@@ -27,21 +27,20 @@ pmdchaind keys add $KEY_FAUCET --keyring-backend $KEYRING --algo $KEYALGO
 # Set moniker and chain-id for pmdchain (Moniker can be anything, chain-id must be an integer)
 pmdchaind init $MONIKER --chain-id $CHAINID
 
-# Change parameter token denominations to aPmd
-cat $HOME/.pmdchain/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="aPmd"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
-cat $HOME/.pmdchain/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="aPmd"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
-cat $HOME/.pmdchain/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="aPmd"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
-cat $HOME/.pmdchain/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="aPmd"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
+# Change parameter token denominations to aphoton
+cat $HOME/.pmdchain/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="aphoton"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
+cat $HOME/.pmdchain/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="aphoton"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
+cat $HOME/.pmdchain/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="aphoton"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
+cat $HOME/.pmdchain/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="aphoton"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
 
 # Set gas limit in genesis
 cat $HOME/.pmdchain/config/genesis.json | jq '.consensus_params["block"]["max_gas"]="20000000"' > $HOME/.pmdchain/config/tmp_genesis.json && mv $HOME/.pmdchain/config/tmp_genesis.json $HOME/.pmdchain/config/genesis.json
 
 # Allocate genesis accounts (cosmos formatted addresses)
-pmdchaind add-genesis-account $KEY 100000000000000000000000000aPmd --keyring-backend $KEYRING
-pmdchaind add-genesis-account $KEY_FAUCET 100000000000000000000000000pmd --keyring-backend $KEYRING
+pmdchaind add-genesis-account $KEY 100000000000000000000000000aphoton --keyring-backend $KEYRING
 
 # Sign genesis transaction
-pmdchaind gentx $KEY 1000000000000000000000aPmd --keyring-backend $KEYRING --chain-id $CHAINID
+pmdchaind gentx $KEY 1000000000000000000000aphoton --keyring-backend $KEYRING --chain-id $CHAINID
 
 # Collect genesis tx
 pmdchaind collect-gentxs
@@ -88,5 +87,5 @@ if [[ $1 == "pending" ]]; then
 fi
 
 # Start the node (remove the --pruning=nothing flag if historical queries are not needed)
-# pmdchaind start --pruning=nothing  --log_level $LOGLEVEL --minimum-gas-prices=0.0001aPmd --api.enable
-pmdchaind start --pruning=nothing --evm.tracer=json $TRACE --log_level $LOGLEVEL --minimum-gas-prices=0.0001aPmd --json-rpc.api eth,txpool,personal,net,debug,web3,miner --api.enable
+# pmdchaind start --pruning=nothing  --log_level $LOGLEVEL --minimum-gas-prices=0.0001aphoton --api.enable
+pmdchaind start --pruning=nothing --evm.tracer=json $TRACE --log_level $LOGLEVEL --minimum-gas-prices=0.0001aphoton --json-rpc.api eth,txpool,personal,net,debug,web3,miner --api.enable
